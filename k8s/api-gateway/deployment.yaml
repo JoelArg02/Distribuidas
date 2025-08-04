@@ -27,6 +27,11 @@ spec:
                 configMapKeyRef:
                   name: eureka-config
                   key: EUREKA_URL
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: jwt-secret
           readinessProbe:
             httpGet:
               path: /actuator/health
