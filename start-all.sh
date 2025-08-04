@@ -237,11 +237,9 @@ if [ "$CLEAN_FIRST" = true ]; then
     echo ""
     echo "🧹 PASO 0: Limpiando recursos existentes..."
     
-    # Eliminar namespace (esto elimina todo)
     kubectl delete namespace distribuidas --ignore-not-found=true
     
-    # Esperar a que el namespace se elimine completamente
-    echo "⏳ Esperando a que el namespace se elimine completamente..."
+    echo "Esperando a que el namespace se elimine completamente..."
     while kubectl get namespace distribuidas > /dev/null 2>&1; do
         sleep 2
     done
