@@ -41,9 +41,18 @@ spring:
           filters:
             - StripPrefix=1
 
+app:
+  jwt:
+    secret: ${JWT_SECRET:una_clave_muy_segura_1234567890123456}
+  auth-service:
+    url: ${AUTH_SERVICE_URL:lb://SERVICIO-AUTH}
+
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
+    com.allpasoft.msapigateway: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.web.cors: DEBUG
 
 eureka:
   client:
@@ -63,3 +72,7 @@ management:
   endpoint:
     gateway:
       enabled: true
+    health:
+      show-details: always
+  security:
+    enabled: false

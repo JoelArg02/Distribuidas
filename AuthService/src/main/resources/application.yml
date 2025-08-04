@@ -44,3 +44,11 @@ management:
     web:
       exposure:
         include: health,info
+
+logging:
+  level:
+    com.allpasoft.authservice: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
