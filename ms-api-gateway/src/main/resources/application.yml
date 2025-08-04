@@ -1,0 +1,66 @@
+server:
+  port: ${SERVER_PORT:8000}
+
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+      routes:
+        - id: servicio-publicaciones
+          uri: lb://SERVICIO-PUBLICACIONES
+          predicates:
+            - Path=/publicaciones/**
+          filters:
+            - StripPrefix=1
+
+        - id: servicio-catalogo
+          uri: lb://SERVICIO-CATALOGO
+          predicates:
+            - Path=/catalogo/**
+          filters:
+            - StripPrefix=1
+
+        - id: servicio-notificaciones
+          uri: lb://SERVICIO-NOTIFICACIONES
+          predicates:
+            - Path=/notificaciones/**
+          filters:
+            - StripPrefix=1
+
+        - id: servicio-auth
+          uri: lb://SERVICIO-AUTH
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_CLIENT_SERVICEURL_DEFAULTZONE:http://eureka-server.distribuidas.svc.cluster.local:8761/eureka}
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: gateway,health
+
+  endpoint:
+    gateway:
+      access: public

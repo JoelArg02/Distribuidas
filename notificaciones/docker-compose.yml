@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-multidb
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: db-notifications
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./init-multiple-dbs:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - app-network
+
+volumes:
+  rabbitmq_data:
+
+networks:
+  app-network:
+    driver: bridge
