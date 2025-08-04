@@ -4,6 +4,10 @@ WORKDIR /app
 # Copiar solo pom.xml primero para cache de dependencias
 COPY pom.xml .
 
+# Crear directorio para cache de Maven y configurarlo
+RUN mkdir -p /root/.m2
+VOLUME /root/.m2
+
 # Descargar dependencias (se cachea en esta capa)
 RUN mvn -DskipTests dependency:go-offline
 

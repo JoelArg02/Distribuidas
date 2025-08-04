@@ -60,7 +60,6 @@ management:
       base-path: /actuator
       exposure:
         include: gateway,health
-
   endpoint:
     gateway:
-      access: public
+      enabled: true

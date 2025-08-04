@@ -4,6 +4,10 @@ WORKDIR /app
 # Copiar solo pom.xml primero para cache de dependencias
 COPY pom.xml .
 
+# Crear directorio para cache de Maven y configurarlo
+RUN mkdir -p /root/.m2
+VOLUME /root/.m2
+
 # Descargar dependencias (se cachea en esta capa)
 RUN mvn -DskipTests dependency:go-offline
 
@@ -18,7 +22,7 @@ WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
 # Exponer puerto específico del servicio
-EXPOSE 8000
+EXPOSE 8085
 
 # Configurar JVM para contenedor
 ENTRYPOINT ["java", "-XX:+UseContainerSupport", "-XX:MaxRAMPercentage=75.0", "-jar", "/app/app.jar"]

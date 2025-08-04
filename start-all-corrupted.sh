@@ -15,11 +15,28 @@ show_help() {
     echo "  --deploy-only   Solo desplegar en Kubernetes (asume que las imágenes ya existen)"
     echo "  --clean         Limpiar recursos existentes antes de desplegar"
     echo "  --no-clean      NO limpiar recursos (por defecto SÍ se limpian para evitar conflictos)"
-    echo "  --dashboard     Abrir Minikube dashboard al principio para monitorear"
+    echo "  --dashboard     Abrir Minikube dashboard al finalizar"
     echo "  --check-only    Solo verificar prerequisitos y configurar entorno"
     echo "  --help          Mostrar esta ayuda"
     echo ""
     echo "Sin opciones: Construir imágenes y desplegar (con limpieza automática)"
+}
+    echo "🎛️ Para incluir dashboard:"
+    echo "   $0 --dashboard"
+    echo ""
+    echo "🛠️  Para troubleshooting:"
+    echo "   kubectl describe pod <pod-name> -n distribuidas"
+    echo "   kubectl get events -n distribuidas --sort-by='.lastTimestamp'"
+fis:"
+    echo "  --build-only    Solo construir imágenes Docker"
+    echo "  --deploy-only   Solo desplegar en Kubernetes (asume que las imágenes ya existen)"
+    echo "  --clean         Limpiar recursos existentes antes de desplegar"
+    echo "  --no-clean      NO limpiar recursos (por defecto SÍ se limpian para evitar conflictos)"
+    echo "  --dashboard     Abrir Minikube dashboard al finalizar"
+    echo "  --check-only    Solo verificar prerequisitos y configurar entorno"
+    echo "  --help          Mostrar esta ayuda"
+    echo ""
+    echo "Sin opciones: Construir imágenes y desplegar"
 }
 
 # Variables por defecto
@@ -126,20 +143,19 @@ MINIKUBE_STATUS=$(minikube status --format='{{.Host}}' 2>/dev/null || echo "Stop
 
 if [ "$MINIKUBE_STATUS" != "Running" ]; then
     echo "🚀 Iniciando Minikube (esto puede tomar unos minutos)..."
-    echo "💻 Configuración: 7GB RAM, 4 CPUs, 30GB disco"
     
     # Limpiar cualquier estado corrupto antes de iniciar
     echo "🧹 Limpiando estado previo de Minikube..."
     minikube delete --purge 2>/dev/null || true
     
-    # Iniciar Minikube con configuración limpia y más recursos
-    minikube start --driver=docker --memory=7000 --cpus=4 --disk-size=30g
+    # Iniciar Minikube con configuración limpia
+    minikube start --driver=docker --memory=4096 --cpus=2
     
     if [ $? -ne 0 ]; then
         echo "❌ Error iniciando Minikube"
         echo "💡 Intenta ejecutar manualmente:"
         echo "   minikube delete --purge"
-        echo "   minikube start --driver=docker --memory=7000 --cpus=4 --disk-size=30g"
+        echo "   minikube start --driver=docker --memory=4096 --cpus=2"
         exit 1
     fi
     
@@ -151,7 +167,7 @@ else
     if ! docker ps | grep -q minikube; then
         echo "⚠️  Detectado estado inconsistente de Minikube. Reiniciando..."
         minikube delete --purge
-        minikube start --driver=docker --memory=7000 --cpus=4 --disk-size=30g
+        minikube start --driver=docker --memory=4096 --cpus=2
         
         if [ $? -ne 0 ]; then
             echo "❌ Error reiniciando Minikube"
@@ -174,7 +190,7 @@ if ! minikube addons enable ingress; then
     echo "⚠️  Error habilitando Ingress. Intentando reiniciar Minikube..."
     minikube stop
     sleep 5
-    minikube start --driver=docker --memory=7000 --cpus=4 --disk-size=30g
+    minikube start --driver=docker --memory=4096 --cpus=2
     
     # Intentar nuevamente
     if ! minikube addons enable ingress; then
@@ -214,6 +230,7 @@ fi
 echo ""
 echo "📊 INFORMACIÓN DEL CLUSTER:"
 echo "   Minikube IP: $(minikube ip)"
+echo "   Dashboard URL: http://$(minikube ip):30000/dashboard/"
 echo "   Context actual: $(kubectl config current-context)"
 echo ""
 
@@ -292,13 +309,10 @@ if [ "$DEPLOY_SERVICES" = true ]; then
     echo "🔄 Para reiniciar todo:"
     echo "   $0 --clean"
     echo ""
-    echo "🔍 Para solo verificar entorno:"
+    echo "� Para solo verificar entorno:"
     echo "   $0 --check-only"
     echo ""
-    echo "🎛️ Para incluir dashboard:"
-    echo "   $0 --dashboard"
-    echo ""
-    echo "🛠️  Para troubleshooting:"
+    echo "�🛠️  Para troubleshooting:"
     echo "   kubectl describe pod <pod-name> -n distribuidas"
     echo "   kubectl get events -n distribuidas --sort-by='.lastTimestamp'"
 fi

@@ -132,12 +132,12 @@ kubectl apply -f k8s/notificaciones/service.yaml
 
 # Desplegar servicio-auth
 echo "🔐 Desplegando servicio-auth..."
-kubectl apply -f k8s/servicio-auth/deployment-new.yaml
+kubectl apply -f k8s/servicio-auth/deployment.yaml
 kubectl apply -f k8s/servicio-auth/service.yaml
 
 # Desplegar sync
 echo "🔄 Desplegando sync..."
-kubectl apply -f k8s/sync/deployment-new.yaml
+kubectl apply -f k8s/sync/deployment.yaml
 kubectl apply -f k8s/sync/service.yaml
 
 # Esperar a que todos los microservicios estén listos

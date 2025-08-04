@@ -9,6 +9,15 @@ echo "🔨 Iniciando construcción de todas las imágenes Docker..."
 echo "📦 Configurando entorno Docker para Minikube..."
 eval $(minikube docker-env)
 
+# Crear volumen compartido para cache de Maven si no existe
+echo "📚 Configurando cache de Maven..."
+if ! docker volume ls | grep -q maven-cache; then
+    docker volume create maven-cache
+    echo "✅ Volumen maven-cache creado"
+else
+    echo "✅ Volumen maven-cache ya existe"
+fi
+
 # Servicios a construir
 SERVICES=(
     "ms-eureka-server:ms-eureka-server"
@@ -36,8 +45,10 @@ for service in "${SERVICES[@]}"; do
             continue
         fi
         
-        # Construir la imagen
-        docker build -t "$image_name:latest" .
+        # Construir la imagen con BuildKit para usar cache de Maven
+        DOCKER_BUILDKIT=1 docker build \
+            --build-arg BUILDKIT_INLINE_CACHE=1 \
+            -t "$image_name:latest" .
         
         if [ $? -eq 0 ]; then
             echo "✅ Imagen $image_name construida exitosamente"
@@ -57,6 +68,10 @@ done
 echo "🎉 Todas las imágenes Docker han sido construidas exitosamente!"
 echo "📝 Imágenes disponibles:"
 docker images | grep -E "(ms-eureka-server|ms-api-gateway|ms-publish|ms-catalogo|notificaciones|authservice|sync)"
+
+echo ""
+echo "📊 Espacio usado por el cache de Maven:"
+docker system df -v | grep maven-cache || echo "Cache info no disponible"
 
 echo ""
 echo "💡 Ahora puedes ejecutar ./deploy-k8s.sh para desplegar en Kubernetes"
