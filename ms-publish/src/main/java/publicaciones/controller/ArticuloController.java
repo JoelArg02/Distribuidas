@@ -15,7 +15,7 @@ import publicaciones.dto.ResponseDto;
 import publicaciones.services.ArticuloService;
 
 @RestController
-@RequestMapping("/articulos")
+@RequestMapping("/")
 public class ArticuloController {
 	@Autowired
 	private ArticuloService articuloService;

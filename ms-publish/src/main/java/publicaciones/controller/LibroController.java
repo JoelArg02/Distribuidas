@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
-@RequestMapping("/libros")
+@RequestMapping("/")
 public class LibroController {
 	@Autowired
 	private LibroService libroService;
