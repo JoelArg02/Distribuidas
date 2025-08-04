@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("/autores")
+@RequestMapping("/")
 public class AutorController {
 	@Autowired
 	private AutorService autorService;
