@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: SERVICIO-PUBLICACIONES
+    name: ms-publish
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://cockroachdb-service.distribuidas.svc.cluster.local:26257/ms-publish?user=root&password=}
     username: ${DATABASE_USERNAME:root}

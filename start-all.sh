@@ -364,6 +364,7 @@ EOF
         echo "   Esperando Ingress... (intento $i/30)"
         sleep 2
     done
+
     
     echo ""
     echo "📱 Comandos útiles:"

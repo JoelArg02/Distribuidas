@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: SERVICIO-CATALOGO
+    name: ms-catalogo
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://cockroachdb-service.distribuidas.svc.cluster.local:26257/db-catalog?user=root&password=}
     username: ${DATABASE_USERNAME:root}

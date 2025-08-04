@@ -14,28 +14,28 @@ spring:
 
       routes:
         - id: servicio-publicaciones
-          uri: lb://SERVICIO-PUBLICACIONES
+          uri: lb://ms-publish
           predicates:
             - Path=/publicaciones/**
           filters:
             - StripPrefix=1
 
         - id: servicio-catalogo
-          uri: lb://SERVICIO-CATALOGO
+          uri: lb://ms-catalogo
           predicates:
             - Path=/catalogo/**
           filters:
             - StripPrefix=1
 
         - id: servicio-notificaciones
-          uri: lb://SERVICIO-NOTIFICACIONES
+          uri: lb://notificaciones
           predicates:
             - Path=/notificaciones/**
           filters:
             - StripPrefix=1
             
         - id: servicio-auth
-          uri: lb://SERVICIO-AUTH
+          uri: lb://servicio-auth
           predicates:
             - Path=/auth/**
           filters:

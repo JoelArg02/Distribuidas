@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: SERVICIO-AUTH
+    name: servicio-auth
 
   datasource:
     url: ${DATABASE_URL:jdbc:postgresql://cockroachdb-service.distribuidas.svc.cluster.local:26257/db-auth?user=root&password=}
